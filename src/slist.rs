@@ -52,10 +52,25 @@ mod tests {
 
     use super::Node;
 
+    fn reverse<'n, T>(head: Option<&'n Node<'n, T>>) -> &'n Node<'n, T> {
+        let mut p = None;
+        let mut h = head;
+        while let Some(c) = h {
+            let n = c.next.get();
+            c.next.set(p);
+            p = h;
+            h = n;
+        }
+
+        return p.unwrap();
+    }
+
     #[test]
     fn test_reverse_list() {
-        let head = Node::new(1);
+        let vfwd = vec![1, 77, 23, 4];
+        let vrev: Vec<i32> = vfwd.iter().rev().map(|&x| x as i32).collect();
 
+        let head = Node::new(1);
         let n1 = Node::new(77);
         let n2 = Node::new(23);
         let n3 = Node::new(4);
@@ -64,9 +79,9 @@ mod tests {
         n1.link(&n2);
         n2.link(&n3);
 
-        for (i, v) in head.into_iter().enumerate() {
-            println!("{} -> {}", i, v);
-        }
+        let newhead = reverse(Some(&head));
+        let rev: Vec<i32> = newhead.into_iter().map(|&x| x as i32).collect();
+        assert_eq!(vrev, rev);
     }
 
     #[test]
@@ -83,11 +98,9 @@ mod tests {
             head.set(Some(ns0));
         }
 
-        let mut it = &head;
+        let items: Vec<i32> = head.get().unwrap().into_iter().map(|&x| x as i32).collect();
 
-        while let Some(n) = it.get() {
-            println!("{}", n.v);
-            it = &n.next;
-        }
+        let vitems = vec![5, 42, 11];
+        assert_eq!(vitems, items);
     }
 }
