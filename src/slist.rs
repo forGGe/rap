@@ -98,7 +98,8 @@ mod tests {
             head.set(Some(ns0));
         }
 
-        let items: Vec<i32> = head.get().unwrap().into_iter().map(|&x| x as i32).collect();
+        let items: Vec<i32> =
+            head.get().unwrap().into_iter().map(|&x| x as i32).collect();
 
         let vitems = vec![5, 42, 11];
         assert_eq!(vitems, items);
